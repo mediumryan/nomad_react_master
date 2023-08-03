@@ -1,6 +1,23 @@
 1. props 전송을 위해서는 interface 사용 --- Circle.tsx
 
-2. form, input 관련해서는 event를 받는 값이 다르다.
+-   optional types 지정은 ?
+    const player {
+        name : string;
+        age? : number;
+    } <-- name은 string 타입으로 필수적으로 들어가야 하지만 age는 number | undefined.
+
+
+
+2. state에 typescript 적용
+
+-   기본적으로 타입스크립트는 똑똑하기 때문에 state의 초기값을 바탕으로 타입을 추론해준다.
+
+-   두가지 이상의 타입을 반환해야하는 경우에는 useState 함수에 유니온 타입을 지정해야만 한다.
+    const [counter, setCounter] = useState<number | string>(0);
+
+
+
+3. form, input 관련해서는 event를 받는 값이 다르다.
 
 -   text_input의 경우 기존의 event // event.target.value와 다르게
     event : React.FormEvent<HTMLInputElement> // event.currentTarget.value 사용.
@@ -8,7 +25,9 @@
 -   form의 submit의 경우 기존의 event // preventDefault()와 다르게
     event : React.FormEvent<HTMLFormElement> // event.preventDefault() 사용.
 
-3. theme 사용법
+
+
+4. theme 사용법
 
 -   theme을 사용하기 위해서는 일련의 과정이 필요함.
     - typescript 설치 확인

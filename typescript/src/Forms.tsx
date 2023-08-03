@@ -11,8 +11,6 @@ export default function Forms() {
         event.preventDefault();
     };
 
-    console.log(text);
-
     return (
         <div>
             <form onSubmit={handleSubmit}>

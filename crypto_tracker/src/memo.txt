@@ -1,0 +1,64 @@
+VSCode 단축키
+Ctrl(Command)+D: 같은 문자열 선택
+Shift+Alt(Option)+i: 선택한 모든 문자열에 가장 우측 끝으로 포커싱
+Ctrl(Command)+Shift+오른쪽 화살표: 현재 선택한 문자열을 기준으로 우측 끝까지 문자열 선택
+
+// key값 받기
+
+-   console에 찍힌 배열 혹은 오브젝트 우클릭.
+-   Store object as global variable 클릭.
+-   'temp1', 'temp2' 와 같이 새로 만들어진 변수 사용.
+-   console에 Object.keys(temp1).join()값을 에디터에 붙여넣기.
+-   붙인 값의 맨 앞 콤마(,)지정 후 Ctrl(Command)+D: 같은 문자열 선택, 삭제, 엔터로 줄바꿈.
+
+// value값 받기
+
+-   console에 찍힌 배열 혹은 오브젝트 우클릭.
+-   Store object as global variable 클릭.
+-   'temp1', 'temp2' 와 같이 새로 만들어진 변수 사용.
+-   console에 Object.values(temp1).map(v => typeof v).join()값을 에디터에 붙여넣기.
+-   붙인 값의 맨 앞 콤마(,)지정 후 Ctrl(Command)+D: 같은 문자열 선택, 삭제, 엔터로 줄바꿈.
+
+단 value의 값이 배열, 오브젝트인 경우엔 같은 과정을 반복하거나 직접 입력해야함.
+
+
+///////////////  React Query  //////////////////
+
+// 라이브러리 설치
+
+-   npm install --save react-query
+
+//  Setting
+
+-   index.tsx 파일
+-   App 컴포넌트를 QueryClientProvider 컴포넌트로 감싼다. (import 잊지말기)
+-   return값 밖에 const queryClient = new QueryClient(); 쿼리 클라이언트를 사용할수 있도록 불러온다.(import 잊지말기)
+-   QueryClientProvider에 client={queryClient} 속성값을 추가해준다.
+
+//  함수 선언
+
+-   api.ts(파일명 무관) 생성
+-   원하는 api 데이터를 json 형태로 불러올 수 있는 함수를 생성한다.
+ex :: export const fetchCoins = async () => {
+    return await axios.get(`${BASE_URL}/coins`).then((res) => res.data);
+};
+
+//  useQuery
+
+-   사용하고자하는 컴포넌트에 useQuery import 후 아래와 같이 사용 가능.
+-   const { isLoading, data } = useQuery<ICoin[]>('allCoins', fetchCoins);
+-   좌항의 data는 api에서 받아온 실제 데이터에 해당, isLoading은 실제 로딩관련 함수이다.
+-   useQuery의 인자 (유니크 키값, api.ts에서 생성한 함수).
+-   TypeScript의 경우 useQuery<ICoin[]>('allCoins', fetchCoins); 과 같이 interface를 생성해 data라는 값에 대해 설명해줘야 한다.
+
+//  불러올 함수가 2개 이상일 경우
+
+-   const { isLoading: infoLoading, data: infoData } = useQuery<infoData>(
+        ['info', coinId],
+        () => fetchCoinInfo(coinId!)
+    );
+    const { isLoading: tickersLoading, data: tickersData } =
+        useQuery<priceData>(['tickers', coinId], () =>
+            fetchCoinTickers(coinId!)
+        ); 
+    다음과 같이 사용 가능하다.

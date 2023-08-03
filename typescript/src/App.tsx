@@ -1,6 +1,7 @@
-import React from 'react';
 import './index.css';
 import { styled } from 'styled-components';
+import Forms from './Forms';
+import Circle from './Circle';
 
 const MainContainer = styled.div`
     height: 100vh;
@@ -18,6 +19,8 @@ function App() {
     return (
         <MainContainer>
             <Text>hihihi</Text>
+            <Forms />
+            <Circle bg_color="red" border_color="green" />
         </MainContainer>
     );
 }
