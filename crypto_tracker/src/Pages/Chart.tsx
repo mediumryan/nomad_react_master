@@ -2,7 +2,6 @@ import { useQuery } from 'react-query';
 import { useOutletContext } from 'react-router-dom';
 import { fetchCoinHistory } from './api';
 import ApexChart from 'react-apexcharts';
-import { theme } from './theme';
 import { styled } from 'styled-components';
 
 interface IHistorical {
@@ -21,11 +20,16 @@ interface ChartProps {
 }
 
 const ChartContainer = styled.div`
-    width: 50%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
 `;
+
+interface CandlestickData {
+    x: Date;
+    y: [number, number, number, number];
+}
 
 export default function Chart() {
     const { coinId } = useOutletContext<ChartProps>();
@@ -40,66 +44,49 @@ export default function Chart() {
         }
     );
 
+    const series: CandlestickData[] = data
+        ? data.map((item) => ({
+              x: new Date(item.time_open * 1000),
+              y: [
+                  parseFloat(item.open),
+                  parseFloat(item.high),
+                  parseFloat(item.low),
+                  parseFloat(item.close),
+              ],
+          }))
+        : [];
+
+    const options: ApexCharts.ApexOptions = {
+        chart: {
+            type: 'candlestick',
+            toolbar: {
+                show: false,
+            },
+        },
+        xaxis: {
+            labels: {
+                show: false,
+            },
+        },
+        yaxis: {
+            show: false,
+        },
+    };
+
     return (
         <ChartContainer>
             {isLoading ? (
                 'Loading Chart...'
             ) : (
                 <ApexChart
-                    style={{ width: '50%' }}
-                    type="line"
+                    style={{ width: '85%' }}
+                    options={options}
                     series={[
                         {
-                            name: 'Close Price',
-                            data:
-                                data?.map((price) => parseFloat(price.close)) ??
-                                [],
+                            data: series,
                         },
                     ]}
-                    options={{
-                        theme: {
-                            mode: 'light',
-                        },
-                        chart: {
-                            height: 500,
-                            width: 500,
-                            toolbar: {
-                                show: false,
-                            },
-                        },
-                        grid: {
-                            show: false,
-                        },
-                        xaxis: {
-                            labels: {
-                                show: false,
-                            },
-                            type: 'datetime',
-                            categories: data?.map((price) =>
-                                new Date(price.time_close * 1000).toISOString()
-                            ),
-                        },
-                        yaxis: {
-                            show: false,
-                        },
-                        stroke: {
-                            curve: 'smooth',
-                            width: 3,
-                        },
-                        fill: {
-                            type: 'gradient',
-                            gradient: {
-                                gradientToColors: ['#8B5FBF'],
-                                stops: [0, 100],
-                            },
-                        },
-                        colors: ['#61398F'],
-                        tooltip: {
-                            y: {
-                                formatter: (val) => `$${val.toFixed(2)}`,
-                            },
-                        },
-                    }}
+                    type="candlestick"
                 />
             )}
         </ChartContainer>

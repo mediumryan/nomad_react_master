@@ -61,18 +61,17 @@ interface priceData {
     };
 }
 
-const CoinWrapper = styled.div<{ isActive: boolean }>`
+const CoinWrapper = styled.div`
     background-color: ${(props) => props.theme.bgColor};
-    height: ${(props) => (props.isActive ? '100%' : '100vh')};
-    padding: 24px 48px;
+    height: 100vh;
+    padding: 24px 128px;
 `;
 
 const TitleContainer = styled.div`
-    width: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 12px 0;
+    margin: 24px 0;
 `;
 
 const Title = styled.h1`
@@ -88,7 +87,15 @@ const TitleImg = styled.img`
     margin-right: 12px;
 `;
 
+const ContentWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: 5rem;
+`;
+
 const OverViewBox = styled.div`
+    flex-basis: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -96,9 +103,9 @@ const OverViewBox = styled.div`
 `;
 
 const OverView = styled.div`
+    width: 100%;
     background-color: ${(props) => props.theme.boxColor};
     color: ${(props) => props.theme.textColor};
-
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -106,7 +113,6 @@ const OverView = styled.div`
     margin: 12px;
     text-align: center;
     border-radius: 20px;
-    width: 50%;
 `;
 
 const OverViewItem = styled.div`
@@ -122,6 +128,7 @@ const OverViewItem = styled.div`
 `;
 
 const Description = styled.div`
+    width: 100%;
     color: ${(props) => props.theme.textColor};
     display: flex;
     justify-content: space-evenly;
@@ -130,15 +137,22 @@ const Description = styled.div`
     margin: 12px;
     font-size: 20px;
     line-height: 1.5;
-    width: 50%;
+`;
+
+const PriceAndChart = styled.div`
+    flex-basis: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-items: center;
 `;
 
 const LinkBox = styled.div`
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 24px 0;
-    width: 50%;
 `;
 
 const LinkTo = styled(StyledLink)<{ isActive: boolean }>`
@@ -178,74 +192,71 @@ export default function Coin() {
     const loading = infoLoading || tickersLoading;
 
     return (
-        <CoinWrapper
-            isActive={priceMatch || chartMatch !== null ? true : false}
-        >
+        <CoinWrapper>
             <HelmetProvider>
                 <Helmet>
-                    <title>
-                        {state?.name
-                            ? state.name
-                            : loading
-                            ? 'Loading...'
-                            : infoData?.name}
-                    </title>
+                    <title>{state?.name}</title>
                 </Helmet>
             </HelmetProvider>
-            <OverViewBox>
-                <TitleContainer>
-                    <TitleImg
-                        src={`https://coinicons-api.vercel.app/api/icon/${infoData?.symbol.toLowerCase()}`}
-                    />
-                    <Title>
-                        {state?.name
-                            ? state.name
-                            : loading
-                            ? 'Loading...'
-                            : infoData?.name}
-                    </Title>
-                </TitleContainer>
-                <OverView>
-                    <OverViewItem>
-                        <span>Rank : </span>
-                        <span>{infoData?.rank}</span>
-                    </OverViewItem>
-                    <OverViewItem>
-                        <span>Symbol : </span>
-                        <span>{infoData?.symbol}</span>
-                    </OverViewItem>
-                    <OverViewItem>
-                        <span>Price : </span>
-                        <span>{tickersData?.quotes.USD.price.toFixed(3)}</span>
-                    </OverViewItem>
-                </OverView>
-                <Description>{infoData?.description}</Description>
-                <OverView>
-                    <OverViewItem>
-                        <span>Total Supply : </span>
-                        <span>{tickersData?.total_supply}</span>
-                    </OverViewItem>
-                    <OverViewItem>
-                        <span>Max Supply : </span>
-                        <span>{tickersData?.max_supply}</span>
-                    </OverViewItem>
-                </OverView>
-                <LinkBox>
-                    <LinkTo
-                        to="price"
-                        isActive={priceMatch !== null ? true : false}
-                    >
-                        Price
-                    </LinkTo>
-                    <LinkTo
-                        to="chart"
-                        isActive={chartMatch !== null ? true : false}
-                    >
-                        Chart
-                    </LinkTo>
-                </LinkBox>
-                <Outlet context={{ coinId }}></Outlet>
-            </OverViewBox>
+            <TitleContainer>
+                <TitleImg
+                    src={`https://coinicons-api.vercel.app/api/icon/${infoData?.symbol.toLowerCase()}`}
+                />
+                <Title>
+                    {state?.name
+                        ? state.name
+                        : loading
+                        ? 'Loading...'
+                        : infoData?.name}
+                </Title>
+            </TitleContainer>
+            <ContentWrapper>
+                <OverViewBox>
+                    <OverView>
+                        <OverViewItem>
+                            <span>Name : </span>
+                            <span>{tickersData?.name}</span>
+                        </OverViewItem>
+                        <OverViewItem>
+                            <span>Symbol : </span>
+                            <span>{infoData?.symbol}</span>
+                        </OverViewItem>
+                        <OverViewItem>
+                            <span>Rank : </span>
+                            <span>{infoData?.rank}</span>
+                        </OverViewItem>
+                    </OverView>
+                    <Description>{infoData?.description}</Description>
+                    <OverView>
+                        <OverViewItem>
+                            <span>Total Supply : </span>
+                            <span>{tickersData?.total_supply}</span>
+                        </OverViewItem>
+                        <OverViewItem>
+                            <span>Max Supply : </span>
+                            <span>{tickersData?.max_supply}</span>
+                        </OverViewItem>
+                    </OverView>
+                </OverViewBox>
+
+                <PriceAndChart>
+                    <LinkBox>
+                        <LinkTo
+                            to="price"
+                            isActive={priceMatch !== null ? true : false}
+                        >
+                            Price
+                        </LinkTo>
+                        <LinkTo
+                            to="chart"
+                            isActive={chartMatch !== null ? true : false}
+                        >
+                            Chart
+                        </LinkTo>
+                    </LinkBox>
+                    <Outlet context={{ coinId }}></Outlet>
+                </PriceAndChart>
+            </ContentWrapper>
         </CoinWrapper>
     );
 }

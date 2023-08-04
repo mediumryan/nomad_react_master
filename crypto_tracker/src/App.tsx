@@ -4,31 +4,42 @@ import Coins from './Pages/Coins';
 import Coin from './Pages/Coin';
 import Price from './Pages/Price';
 import Chart from './Pages/Chart';
-import { styled } from 'styled-components';
+import { keyframes, styled } from 'styled-components';
+import { FaBackward } from 'react-icons/fa';
+
+const backBtnAnimation = keyframes`
+    from {
+        transform: translate(0);
+    }
+    to {
+        transform: translateX(-10px);
+    }
+`;
 
 const BackBtn = styled.button`
     position: absolute;
     top: 50px;
     left: 50px;
-    width: 50px;
-    height: 50px;
-    border-radius: 25px;
+    border-radius: 50%;
+    font-size: 18px;
+    padding: 12px;
     border: none;
     background-color: ${(props) => props.theme.accentColor};
     color: #fff;
     cursor: pointer;
+    &:hover {
+        animation: ${backBtnAnimation} 700ms linear infinite;
+    }
 `;
-
-interface ChartProps {
-    coinId: string;
-}
 
 function App() {
     const navigate = useNavigate();
 
     return (
         <div className="App">
-            <BackBtn onClick={() => navigate(-1)}>뒤로가기</BackBtn>
+            <BackBtn onClick={() => navigate('')}>
+                <FaBackward />
+            </BackBtn>
             <Routes>
                 <Route path="/" element={<Coins />} />
                 <Route path="/:coinId" element={<Coin />}>

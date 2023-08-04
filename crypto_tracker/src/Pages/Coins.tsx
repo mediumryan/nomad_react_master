@@ -33,6 +33,7 @@ export const StyledLink = styled(Link)`
     text-decoration: none;
     color: inherit;
     font-size: 24px;
+    font-weight: 700;
     transition: 300ms ease-in;
 `;
 
